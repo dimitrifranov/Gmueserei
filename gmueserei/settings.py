@@ -8,23 +8,20 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+USE_TZ = True
 TIME_ZONE = 'Europe/Zurich'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '8cd-j&jo=-#ecd1jjulp_s*7y$n4tad(0d_g)l=6@n^r8fg3rn'
 
-DEBUG = os.environ.get("JUNTAGRICO_DEBUG", "True") == "True"
+DEBUG = os.environ.get("JUNTAGRICO_DEBUG", "False") == "True"
 
 
 ALLOWED_HOSTS = ['mini.gmueserei.ch', 'localhost',]
 
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_SECONDS = 3600
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 ADMINS = (
     ('Admin', os.environ.get('JUNTAGRICO_ADMIN_EMAIL')),
-    ('Error', os.environ.get('JUNTAGRICO_ERROR_EMAIL')),
 )
 MANAGERS = ADMINS
 
@@ -41,6 +38,8 @@ INSTALLED_APPS = [
     'juntagrico',
     'impersonate',
     'gmueserei',
+    'crispy_forms',
+    'adminsortable2'
 ]
 
 ROOT_URLCONF = 'gmueserei.urls'
@@ -67,12 +66,12 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
+                'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
-                'juntagrico.personalisation.loaders.personal_directories.Loader'
             ],
             'debug' : True
         },
@@ -82,7 +81,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'gmueserei.wsgi.application'
 
 
-LANGUAGE_CODE = 'de-ch'
+LANGUAGE_CODE = 'de'
 
 SITE_ID = 1
 
@@ -145,12 +144,6 @@ IMPERSONATE = {
 
 LOGIN_REDIRECT_URL = "/my/home"
 
-DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
-try:
-    DROPBOX_OAUTH2_TOKEN = os.environ['JUNTAGRICO_DROPBOX_TOKEN']
-except KeyError:
-    raise KeyError('Need to define Dropbox environment variables: ' +
-                   'JUNTAGRICO_DROPBOX_TOKEN')
 
 # Default Django Storage API behavior - don't overwrite files with same name
 MEDIA_ROOT = 'media'
@@ -201,19 +194,11 @@ IMAGES = {'status_100': '/static/img/status_100.png',
             'core': '/static/img/core.png'
 }
 EMAILS = {
-    'welcome': 'mailsgm/welcome_mail.txt',
-    'co_welcome': 'mailsgm/welcome_added_mail.txt',
-    'password': 'mailsgm/password_reset_mail.txt',
-    'j_reminder': 'mailsgm/job_reminder_mail.txt',
-    'j_canceled': 'mailsgm/job_canceled_mail.txt',
-    'confirm': 'mailsgm/confirm.txt',
-    'j_changed': 'mailsgm/job_time_changed_mail.txt',
-    'j_signup': 'mailsgm/job_signup_mail.txt',
-    'd_changed': 'mailsgm/depot_changed_mail.txt',
-    's_canceled': 'mailsgm/subscription_canceled_mail.txt',
-    'b_share': 'mailsgm/bill_share.txt',
-    'b_sub': 'mailsgm/bill_sub.txt',
-    'b_esub': 'mailsgm/bill_extrasub.txt'
+    'b_share': 'mails/bill_share.txt',
+    'b_sub': 'mails/bill_sub.txt',
+    'b_esub': 'mails/bill_extrasub.txt'
 }
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 BASE_FEE='50'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
