@@ -7,3 +7,5 @@ static/*
 ssl/*
 /.project
 *.db
+.vscode
+.python-version
