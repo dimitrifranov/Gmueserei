@@ -212,3 +212,4 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 BASE_FEE = "50"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+BILLS_USERMENU = True
